@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>۳x-ui | اشتراک بنفش</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Vazirmatn Font (وزیرمتن) -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif !important;
+            background: linear-gradient(145deg, #0a0618 0%, #1a0a30 45%, #0f0522 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .glass-card {
+            background: rgba(46, 16, 73, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(160, 80, 255, 0.15);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8);
+        }
+        .purple-glow {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+        .mono {
+            font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+        }
+        .qr-box {
+            display: none;
+        }
+        .qr-box.show {
+            display: flex;
+        }
+        #list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 40px;
+        }
+        .copy-btn:hover {
+            background: #7c3aed !important;
+            color: #fff !important;
+        }
+        .qr-toggle:hover {
+            background: #4c1d95 !important;
+            color: #fff !important;
+        }
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+            color: #a78bfa !important;
+        }
+        .border-purple-dim {
+            border-color: rgba(124, 58, 237, 0.2);
+        }
+        .bg-purple-soft {
+            background: rgba(124, 58, 237, 0.08);
+        }
+        /* رفع مشکل فونت در همه جای صفحه */
+        h1, h2, h3, h4, p, span, div, button, a, input, textarea {
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif !important;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', 'Vazirmatn', monospace !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="w-full max-w-md mx-auto space-y-5 mt-2 sm:mt-6">
+
+        <!-- ===== هدر ===== -->
+        <div class="glass-card rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden purple-glow">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-purple-600"></div>
+
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-600 to-fuchsia-700 flex items-center justify-center mx-auto shadow-2xl mb-4">
+                <i class="fas fa-cubes text-3xl text-white drop-shadow-md"></i>
+            </div>
+
+            <h1 class="text-2xl font-bold text-white tracking-tight">۳x-ui</h1>
+            <p class="text-sm text-purple-200/70 mt-0.5">سامانهٔ مدیریت اشتراک</p>
+
+            <div class="mt-3 text-xs text-slate-300/60" id="statusMsg">
+                <i class="fas fa-spinner fa-spin ml-1.5"></i> در حال دریافت اطلاعات...
+            </div>
+
+            <span id="statusBadge" class="inline-flex items-center gap-2 mt-3 px-4 py-1.5 text-xs font-medium bg-purple-500/10 text-purple-300 rounded-full border border-purple-500/20">
+                <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                <span id="statusBadgeText">در حال بررسی</span>
+            </span>
+
+            <!-- ===== لینک‌های اجتماعی ===== -->
+            <div class="flex items-center justify-center gap-4 mt-4 pt-3 border-t border-purple-500/10">
+                <a href="https://github.com/TheAghaBanafshi" target="_blank" class="text-purple-300/50 social-icon text-base" title="گیت‌هاب">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://t.me/aghabanafshi" target="_blank" class="text-purple-300/50 social-icon text-base" title="تلگرام شخصی">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://t.me/PurpleGangs1" target="_blank" class="text-purple-300/50 social-icon text-base" title="گروه بنفش‌ها">
+                    <i class="fas fa-users"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- ===== کارت مصرف ===== -->
+        <div class="glass-card rounded-3xl p-5 shadow-2xl space-y-4 hidden" id="usageCard">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-purple-200/70"><i class="fas fa-chart-pie ml-2 text-purple-400"></i>حجم مصرف‌شده</span>
+                <span class="font-bold text-white" id="usageHeadline">- <span class="text-xs text-purple-300/50" id="usageHeadlineSub"></span></span>
+            </div>
+
+            <div class="w-full bg-slate-800/60 rounded-full h-2.5 overflow-hidden p-[2px]">
+                <div class="bg-gradient-to-r from-purple-500 to-fuchsia-500 h-full rounded-full transition-all duration-700" id="usageFill" style="width: 0%"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2 text-xs">
+                <div class="bg-slate-900/40 p-3 rounded-xl border border-purple-500/10">
+                    <div class="text-purple-300/60 mb-1"><i class="fas fa-calendar-days ml-1.5 text-purple-400"></i>تمدید بعدی</div>
+                    <div class="font-semibold text-slate-200" id="renewDate">-</div>
+                </div>
+                <div class="bg-slate-900/40 p-3 rounded-xl border border-purple-500/10">
+                    <div class="text-purple-300/60 mb-1"><i class="fas fa-hourglass-half ml-1.5 text-fuchsia-400"></i>زمان باقی‌مانده</div>
+                    <div class="font-semibold text-slate-200" id="daysLeft">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ترکیب پروتکل‌ها ===== -->
+        <div class="glass-card rounded-3xl p-5 shadow-2xl hidden" id="protoCard">
+            <div class="text-sm text-purple-200/60 mb-3"><i class="fas fa-shuffle ml-2 text-purple-400"></i>ترکیب پروتکل‌ها</div>
+            <div id="protoBars" class="space-y-2.5"></div>
+        </div>
+
+        <!-- ===== لیست کانفیگ‌ها ===== -->
+        <div class="space-y-3 hidden" id="listWrap">
+            <div class="flex items-center justify-between mr-1">
+                <h2 class="text-xs font-bold text-purple-300/70 uppercase tracking-wider">کانفیگ‌ها <span class="mono text-purple-400/60" id="countBadge">(۰)</span></h2>
+                <button id="copyAllBtn" class="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+                    <i class="fas fa-copy ml-1.5"></i>کپی همه
+                </button>
+            </div>
+            <div id="list"></div>
+        </div>
+
+        <p class="text-center text-xs text-purple-300/40 hidden" id="emptyMsg">کانفیگی پیدا نشد. لینک اشتراک رو بررسی کن.</p>
+
+        <!-- ===== فوتر ===== -->
+        <div class="text-center pt-2">
+            <p class="text-[10px] text-purple-300/20">طراحی شده توسط <span class="text-purple-400/40">آقا بنفش</span></p>
+            <div class="flex items-center justify-center gap-3 mt-2">
+                <a href="https://github.com/TheAghaBanafshi" target="_blank" class="text-purple-300/30 social-icon text-xs flex items-center gap-1">
+                    <i class="fab fa-github"></i> گیت‌هاب
+                </a>
+                <span class="text-purple-300/10">|</span>
+                <a href="https://t.me/aghabanafshi" target="_blank" class="text-purple-300/30 social-icon text-xs flex items-center gap-1">
+                    <i class="fab fa-telegram"></i> تلگرام
+                </a>
+                <span class="text-purple-300/10">|</span>
+                <a href="https://t.me/PurpleGangs1" target="_blank" class="text-purple-300/30 social-icon text-xs flex items-center gap-1">
+                    <i class="fas fa-users"></i> گروه
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        //  المان‌ها
+        // ============================================================
+        const statusMsg = document.getElementById('statusMsg');
+        const statusBadge = document.getElementById('statusBadge');
+        const statusBadgeText = document.getElementById('statusBadgeText');
+        const usageCard = document.getElementById('usageCard');
+        const usageFill = document.getElementById('usageFill');
+        const usageHeadline = document.getElementById('usageHeadline');
+        const usageHeadlineSub = document.getElementById('usageHeadlineSub');
+        const renewDate = document.getElementById('renewDate');
+        const daysLeft = document.getElementById('daysLeft');
+        const protoCard = document.getElementById('protoCard');
+        const protoBars = document.getElementById('protoBars');
+        const listWrap = document.getElementById('listWrap');
+        const listEl = document.getElementById('list');
+        const countBadge = document.getElementById('countBadge');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const copyAllBtn = document.getElementById('copyAllBtn');
+
+        // ============================================================
+        //  توابع کمکی
+        // ============================================================
+        function toast(text) {
+            const el = document.createElement('div');
+            el.className =
+                "fixed bottom-5 left-1/2 -translate-x-1/2 bg-purple-600 text-white font-bold px-4 py-2.5 rounded-xl shadow-2xl text-xs z-50 transition-all border border-purple-400/30";
+            el.innerHTML = '<i class="fas fa-check-circle ml-1.5 text-fuchsia-300"></i> ' + text;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1800);
+        }
+
+        function setBadge(state, text) {
+            const map = {
+                loading: ['bg-purple-500/10', 'text-purple-300', 'border-purple-500/20', 'bg-purple-400', true],
+                active: ['bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20', 'bg-emerald-400', true],
+                error: ['bg-rose-500/10', 'text-rose-400', 'border-rose-500/20', 'bg-rose-400', false],
+            };
+            const [bg, txt, border, dot, pulse] = map[state] || map.loading;
+            statusBadge.className =
+                `inline-flex items-center gap-2 mt-3 px-4 py-1.5 text-xs font-medium ${bg} ${txt} rounded-full border ${border}`;
+            statusBadge.innerHTML =
+                `<span class="w-2 h-2 rounded-full ${dot} ${pulse ? 'animate-pulse' : ''}"></span><span>${text}</span>`;
+        }
+
+        function setStatus(text) {
+            statusMsg.innerHTML = text;
+        }
+
+        function b64decode(str) {
+            str = str.trim().replace(/-/g, '+').replace(/_/g, '/');
+            while (str.length % 4) str += '=';
+            try { return decodeURIComponent(escape(atob(str))); } catch (e) { try { return atob(str); } catch (e2) { return ''; } }
+        }
+
+        function fmtBytes(bytes) {
+            if (!isFinite(bytes) || bytes < 0) return '-';
+            const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+            let i = 0,
+                v = bytes;
+            while (v >= 1024 && i < units.length - 1) { v /= 1024;
+                i++; }
+            return v.toFixed(v >= 10 ? 0 : 1) + ' ' + units[i];
+        }
+
+        const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+        function toFa(n) { return String(n).replace(/[0-9]/g, d => persianDigits[d]); }
+
+        function toJalali(gy, gm, gd) {
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let jy;
+            if (gy <= 1600) { jy = 0;
+                gy -= 621; } else { jy = 979;
+                gy -= 1600; }
+            const gy2 = (gm > 2) ? (gy + 1) : gy;
+            let days = (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) -
+                80 + gd + g_d_m[gm - 1];
+            jy += 33 * Math.floor(days / 12053);
+            days %= 12053;
+            jy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days > 365) { jy += Math.floor((days - 1) / 365);
+                days = (days - 1) % 365; }
+            const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+            const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+            return [jy, jm, jd];
+        }
+
+        function fmtJalaliDate(unixSeconds) {
+            const d = new Date(unixSeconds * 1000);
+            const [jy, jm, jd] = toJalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+            return toFa(`${jy}/${String(jm).padStart(2,'0')}/${String(jd).padStart(2,'0')}`);
+        }
+
+        // ============================================================
+        //  نمایش اطلاعات مصرف
+        // ============================================================
+        function renderUsageInfo(headerStr) {
+            if (!headerStr) { usageCard.classList.add('hidden'); return; }
+            const parts = {};
+            headerStr.split(';').forEach(p => {
+                const [k, v] = p.trim().split('=');
+                if (k && v !== undefined) parts[k.trim()] = parseInt(v.trim(), 10);
+            });
+            const used = (parts.upload || 0) + (parts.download || 0);
+            const total = parts.total || 0;
+            const expire = parts.expire || 0;
+
+            usageCard.classList.remove('hidden');
+            if (total > 0) {
+                const pct = Math.min(100, (used / total) * 100);
+                usageFill.style.width = pct + '%';
+                usageFill.className = 'h-full rounded-full transition-all duration-700 bg-gradient-to-r ' +
+                    (pct > 90 ? 'from-rose-500 to-rose-700' : pct > 70 ? 'from-amber-400 to-amber-600' :
+                        'from-purple-500 to-fuchsia-500');
+                usageHeadline.innerHTML = `${fmtBytes(used)} <span class="text-xs text-purple-300/50">از ${fmtBytes(total)}</span>`;
+            } else if (used > 0) {
+                usageFill.style.width = '100%';
+                usageHeadline.innerHTML = `${fmtBytes(used)} <span class="text-xs text-purple-300/50">مصرف‌شده (نامحدود)</span>`;
+            } else {
+                usageFill.style.width = '0%';
+                usageHeadline.textContent = 'بدون مصرف';
+            }
+
+            if (expire > 0) {
+                const now = Math.floor(Date.now() / 1000);
+                const days = Math.max(0, Math.ceil((expire - now) / 86400));
+                daysLeft.textContent = toFa(days) + ' روز';
+                renewDate.textContent = fmtJalaliDate(expire);
+            } else {
+                daysLeft.textContent = 'نامحدود';
+                renewDate.textContent = 'نامحدود';
+            }
+        }
+
+        // ============================================================
+        //  تشخیص پروتکل
+        // ============================================================
+        function detectProto(uri) {
+            if (uri.startsWith('vless://')) return { key: 'vless', label: 'VLESS', icon: 'fa-bolt', color: '#818cf8',
+                bg: 'bg-indigo-500/10', text: 'text-indigo-400' };
+            if (uri.startsWith('vmess://')) return { key: 'vmess', label: 'VMESS', icon: 'fa-shuffle', color: '#c084fc',
+                bg: 'bg-purple-500/10', text: 'text-purple-400' };
+            if (uri.startsWith('trojan://')) return { key: 'trojan', label: 'TROJAN', icon: 'fa-mask', color: '#f472b6',
+                bg: 'bg-pink-500/10', text: 'text-pink-400' };
+            if (uri.startsWith('ss://')) return { key: 'ss', label: 'SHADOWSOCKS', icon: 'fa-lock', color: '#38bdf8',
+                bg: 'bg-sky-500/10', text: 'text-sky-400' };
+            if (uri.startsWith('hysteria2://') || uri.startsWith('hy2://')) return { key: 'hy2', label: 'HYSTERIA2',
+                icon: 'fa-cloud', color: '#34d399', bg: 'bg-emerald-500/10', text: 'text-emerald-400' };
+            if (uri.startsWith('tuic://')) return { key: 'tuic', label: 'TUIC', icon: 'fa-satellite-dish', color: '#fbbf24',
+                bg: 'bg-amber-500/10', text: 'text-amber-400' };
+            return { key: 'other', label: 'سایر', icon: 'fa-link', color: '#94a3b8', bg: 'bg-slate-500/10',
+                text: 'text-slate-400' };
+        }
+
+        function parseEntry(uri) {
+            const proto = detectProto(uri);
+            let name = proto.label;
+            let subtitle = '';
+            try {
+                if (proto.key === 'vmess') {
+                    const json = JSON.parse(b64decode(uri.replace('vmess://', '')));
+                    name = json.ps || proto.label;
+                    subtitle = `${json.add || '-'}:${json.port || '-'} · ${json.net || 'tcp'}`;
+                } else {
+                    const hashIdx = uri.indexOf('#');
+                    if (hashIdx > -1) name = decodeURIComponent(uri.slice(hashIdx + 1)) || proto.label;
+                    const body = uri.split('://')[1] || '';
+                    const beforeHash = body.split('#')[0];
+                    const [userAndHost, queryStr] = beforeHash.split('?');
+                    const afterAt = userAndHost.includes('@') ? userAndHost.split('@')[1] : userAndHost;
+                    const [host, port] = afterAt.split(':');
+                    const qs = new URLSearchParams(queryStr || '');
+                    subtitle = `${host || '-'}:${port || '-'} · ${qs.get('type') || 'tcp'}`;
+                }
+            } catch (e) {}
+            return { uri, proto, name, subtitle };
+        }
+
+        // ============================================================
+        //  نمایش ترکیب پروتکل‌ها
+        // ============================================================
+        function renderProtoBreakdown(entries) {
+            const counts = {};
+            entries.forEach(e => { counts[e.proto.key] = (counts[e.proto.key] || 0) + 1; });
+            const keys = Object.keys(counts);
+            protoBars.innerHTML = '';
+            if (keys.length === 0) { protoCard.classList.add('hidden'); return; }
+            protoCard.classList.remove('hidden');
+            const max = Math.max(...Object.values(counts));
+            keys.forEach(k => {
+                const sample = entries.find(e => e.proto.key === k).proto;
+                const row = document.createElement('div');
+                row.className = 'flex items-center gap-3 text-xs';
+                row.innerHTML = `
+                    <span class="w-20 flex-shrink-0 font-semibold mono" style="color:${sample.color}">${sample.label}</span>
+                    <div class="flex-1 h-1.5 bg-slate-800/60 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full" style="width:${(counts[k]/max*100)}%;background:${sample.color}"></div>
+                    </div>
+                    <span class="mono text-purple-300/40 w-5 text-left">${toFa(counts[k])}</span>
+                `;
+                protoBars.appendChild(row);
+            });
+        }
+
+        // ============================================================
+        //  نمایش کانفیگ‌ها
+        // ============================================================
+        function renderEntries(rawText) {
+            listEl.innerHTML = '';
+            const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => /^[a-z0-9]+:\/\//i.test(l));
+
+            if (lines.length === 0) {
+                listWrap.classList.add('hidden');
+                emptyMsg.classList.remove('hidden');
+                setBadge('error', 'کانفیگی یافت نشد');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            listWrap.classList.remove('hidden');
+            setStatus('اطلاعات اشتراک با موفقیت دریافت شد.');
+            setBadge('active', 'سرویس فعال');
+
+            const entries = lines.map(parseEntry);
+            countBadge.textContent = `(${toFa(entries.length)})`;
+            renderProtoBreakdown(entries);
+
+            entries.forEach((entry, idx) => {
+                const card = document.createElement('div');
+                card.className =
+                    "glass-card rounded-xl p-4 shadow-md hover:border-purple-500/30 transition-all duration-300";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-10 h-10 rounded-lg ${entry.proto.bg} ${entry.proto.text} flex items-center justify-center flex-shrink-0">
+                                <i class="fas ${entry.proto.icon} text-lg"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-semibold text-white truncate">${entry.name}</div>
+                                <div class="text-xs text-purple-300/50 mono truncate">${entry.subtitle}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button class="qr-toggle w-9 h-9 rounded-lg bg-slate-800/60 hover:bg-purple-700 hover:text-white flex items-center justify-center text-purple-300/50 transition-colors duration-200">
+                                <i class="fas fa-qrcode"></i>
+                            </button>
+                            <button class="copy-one w-9 h-9 rounded-lg bg-slate-800/60 hover:bg-purple-700 hover:text-white flex items-center justify-center text-purple-300/50 transition-colors duration-200">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="qr-box justify-center mt-4 pt-4 border-t border-dashed border-purple-500/10" id="qr-${idx}">
+                        <div class="p-3 bg-white rounded-lg" id="qr-canvas-${idx}"></div>
+                    </div>
+                `;
+                listEl.appendChild(card);
+
+                card.querySelector('.copy-one').addEventListener('click', () => {
+                    navigator.clipboard.writeText(entry.uri).then(() => toast('لینک کپی شد'));
+                });
+
+                card.querySelector('.qr-toggle').addEventListener('click', () => {
+                    const box = card.querySelector('.qr-box');
+                    const showing = box.classList.contains('show');
+                    box.classList.toggle('show', !showing);
+                    const holder = card.querySelector(`#qr-canvas-${idx}`);
+                    if (!showing && holder.childElementCount === 0) {
+                        new QRCode(holder, { text: entry.uri, width: 168, height: 168, colorDark: '#0B0719',
+                            colorLight: '#ffffff' });
+                    }
+                });
+            });
+        }
+
+        copyAllBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(window.__rawSub || '').then(() => toast('همهٔ کانفیگ‌ها کپی شد'));
+        });
+
+        // ============================================================
+        //  دریافت اطلاعات از سرور
+        // ============================================================
+        async function loadFromServer(idOrUrl) {
+            let url = idOrUrl;
+            if (!/^https?:\/\//i.test(idOrUrl)) {
+                const cleanId = idOrUrl.replace(/^\/+/, '').replace(/^(sub|rawsub|view)\//, '');
+                url = '/rawsub/' + cleanId;
+            }
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('fetch failed');
+            renderUsageInfo(res.headers.get('subscription-userinfo'));
+            const raw = await res.text();
+            let decoded = raw;
+            if (!/:\/\//.test(raw)) {
+                decoded = b64decode(raw);
+            }
+            window.__rawSub = decoded;
+            renderEntries(decoded);
+        }
+
+        // ============================================================
+        //  راه‌اندازی اولیه
+        // ============================================================
+        (function init() {
+            const params = new URLSearchParams(window.location.search);
+            let presetSub = params.get('sub') || params.get('id');
+            if (!presetSub) {
+                const m = window.location.pathname.match(/\/sub\/([^\/?#]+)/);
+                if (m) presetSub = m[1];
+            }
+            if (presetSub) {
+                setStatus('در حال دریافت اطلاعات اشتراک...');
+                setBadge('loading', 'در حال بررسی');
+                loadFromServer(presetSub).catch(() => {
+                    setStatus('دریافت اطلاعات اشتراک ناموفق بود. لینک رو دوباره امتحان کن.');
+                    setBadge('error', 'دریافت ناموفق');
+                });
+            } else {
+                setStatus('لینک معتبر نیست یا شناسهٔ اشتراک وجود ندارد.');
+                setBadge('error', 'لینک نامعتبر');
+            }
+        })();
+    </script>
+
+</body>
+</html>
